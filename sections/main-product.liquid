@@ -80,34 +80,45 @@
   {% comment %} ------------------------------ {% endcomment %}
   {% if section.settings.slider_on_off == 'on' %}
     <script defer="defer">
-        document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', function () {
         let swiper = new Swiper('.swiper', {
           loop: true,
-          spaceBetween: {{section.settings.slides_between}},      
-          slidesPerView: {{section.settings.slides_view}},
-          centeredSlides: true,
-          pagination: {
-            el: '.swiper-pagination',
-          },
-
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
           breakpoints: {
             640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
+              spaceBetween: {{ section.settings.slides_between_mobile }},
+              slidesPerView: {{ section.settings.slides_view_mobile }},
+              pagination: {
+                enabled: {% if section.settings.slider_pagination_mobile == 'on' %}true{% else %}false{% endif %}
+              },
+              navigation: {
+                enabled: {% if section.settings.slider_navigation_mobile == 'on' %}true{% else %}false{% endif %}
+              },
             },
             768: {
-              slidesPerView: 4,
-              spaceBetween: 40,
+              spaceBetween: {{ section.settings.slides_between_tablet }},
+              slidesPerView: {{ section.settings.slides_view_tablet }},
+              pagination: {
+                enabled: {% if section.settings.slider_pagination_tablet == 'on' %}true{% else %}false{% endif %}
+              },
+              navigation: {
+                enabled: {% if section.settings.slider_navigation_tablet == 'on' %}true{% else %}false{% endif %}
+              },
             },
             1024: {
-              slidesPerView: 5,
-              spaceBetween: 50,
+              spaceBetween: {{ section.settings.slides_between }},
+              slidesPerView: {{ section.settings.slides_view }},
+              pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                enabled: {% if section.settings.slider_pagination == 'on' %}true{% else %}false{% endif %}
+              },
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                enabled: {% if section.settings.slider_navigation == 'on' %}true{% else %}false{% endif %}
+              },
+            },
           },
-      }
         });
       });
     </script>
@@ -2248,6 +2259,119 @@
       "label": "Slides per view",
       "default": 1
     },
+    {
+      "type": "header",
+      "content": "⚙️ Slider settings tablet"
+    },
+    {
+      "type": "select",
+      "id": "slider_navigation_tablet",
+      "options": [
+        {
+          "value": "on",
+          "label": "Slider navigation on"
+        },
+        {
+          "value": "off",
+          "label": "Slider navigation off"
+        }
+      ],
+      "default": "off",
+      "label": "Slider navigation off"
+    },
+    {
+      "type": "select",
+      "id": "slider_pagination_tablet",
+      "options": [
+        {
+          "value": "on",
+          "label": "Slider pagination on"
+        },
+        {
+          "value": "off",
+          "label": "Slider pagination off"
+        }
+      ],
+      "default": "off",
+      "label": "Slider pagination off"
+    },
+    {
+      "type": "range",
+      "id": "slides_between_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Space Between for tablet",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "slides_view_tablet",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Slides per view for tablet",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "⚙️ Slider settings mobile"
+    },
+    {
+      "type": "select",
+      "id": "slider_navigation_mobile",
+      "options": [
+        {
+          "value": "on",
+          "label": "Slider navigation on"
+        },
+        {
+          "value": "off",
+          "label": "Slider navigation off"
+        }
+      ],
+      "default": "off",
+      "label": "Slider navigation off"
+    },
+    {
+      "type": "select",
+      "id": "slider_pagination_mobile",
+      "options": [
+        {
+          "value": "on",
+          "label": "Slider pagination on"
+        },
+        {
+          "value": "off",
+          "label": "Slider pagination off"
+        }
+      ],
+      "default": "off",
+      "label": "Slider pagination off"
+    },
+    {
+      "type": "range",
+      "id": "slides_between_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Space Between for mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "slides_view_mobile",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Slides per view for mobile",
+      "default": 1
+    },
+    
     // ------------------------- End
 
     {
