@@ -32,7 +32,7 @@
     }
     .swiper-button-prev,
     .swiper-button-next {
-      display: block;
+      display: block !important;
     }
     @media screen and (min-width: 750px) {
       .section-{{ section.id }}-padding {
@@ -79,9 +79,12 @@
 
   {% comment %} ------------------------------ {% endcomment %}
   {% if section.settings.slider_on_off == 'on' %}
+
+
     <script defer="defer">
       document.addEventListener('DOMContentLoaded', function () {
-        let swiper = new Swiper('.swiper', {
+
+        const swiper = new Swiper('.swiper', {
           loop: true,
           breakpoints: {
             640: {
@@ -120,44 +123,73 @@
             },
           },
         });
+
+    
+      document.addEventListener('click', (event) => {
+          const label = event.target.closest('.swatch-input__label');
+
+          setTimeout(() => {
+            const input = document.querySelector('input[name="id"]');
+
+            const currentId = input.value;
+
+            document.querySelectorAll('.swiper-wrapper').forEach(wrapper => {
+              wrapper.style.display = 'none';
+            });
+
+            const activeWrapper = document.querySelector(`.swiper-wrapper[data-variant-id="${currentId}"]`);
+            if (activeWrapper) {
+              activeWrapper.style.display = '';
+              if (window.swiper) {
+                swiper.update();
+                swiper.slideTo(0);
+              }
+            }
+          }, 500);
+        });
+
       });
     </script>
   {% endif %}
   {% comment %} ------------------------------ {% endcomment %}
-
+  {% assign variant = product.selected_or_first_available_variant %}
+  {% assign variant_images = variant.metafields.custom.variant_images %}
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
-      {% comment %} ------------------------------ {% endcomment %}
 
-      {% if section.settings.slider_on_off == 'on' %}
-        <div class="grid__item product__media-wrapper">
-          <div class="swiper">
-            <div class="swiper-wrapper">
-              {% for media in product.media %}
+    {% if section.settings.slider_on_off == 'on' %}
+
+      <div class="grid__item product__media-wrapper">
+
+        <div class="swiper">
+
+        {% for variant in product.variants %}
+            {% assign images = variant.metafields.custom.variant_images.value %}
+            <div
+              class="swiper-wrapper"
+              data-variant-id="{{ variant.id }}"
+              {% unless variant.id == product.selected_or_first_available_variant.id %}style="display:none;"{% endunless %}
+            >
+              {% for image in images %}
                 <div class="swiper-slide">
-                  <img
-                    src="{{ media.preview_image | image_url: width: 200, height: 220, crop: 'center' }}"
-                    class="img-fluid"
-                    width="{{ media.preview_image.width }}"
-                    height="{{ media.preview_image.height }}"
-                    alt="{{ media.preview_image.alt }}"
-                    loading="lazy"
-                  >
+                  <img src="{{ image | image_url: width: 800 }}" alt="Product image">
                 </div>
               {% endfor %}
             </div>
+          {% endfor %}
 
-            {% if section.settings.slider_pagination == 'on' %}
-              <div class="swiper-pagination"></div>
-            {% endif %}
+          {% if section.settings.slider_pagination == 'on' %}
+            <div class="swiper-pagination"></div>
+          {% endif %}
 
-            {% if section.settings.slider_navigation == 'on' %}
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-button-next"></div>
-            {% endif %}
-
-          </div>
+          {% if section.settings.slider_navigation == 'on' %}
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          {% endif %}
         </div>
+
+      </div>
+   
       {% else %}
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}

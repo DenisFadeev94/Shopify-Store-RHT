@@ -24,12 +24,15 @@
       checked: checked
     %}
 {% endcomment %}
-
+{% assign current_variant = product.selected_or_first_available_variant %}
 <input
   type="{{ type | default: 'radio' }}"
   id="{{ id }}"
   name="{{ name }}"
   value="{{ value }}"
+  
+  data-variant-id="{{ current_variant.id }}"
+  
   form="{{ product_form_id }}"
   class="swatch-input__input{% if visually_disabled %} visually-disabled{% endif %}"
   {% if checked %}
