@@ -60,6 +60,7 @@
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
+        "slider_on_off": "on",
         "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
